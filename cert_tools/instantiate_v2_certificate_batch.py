@@ -19,6 +19,7 @@ from cert_schema import schema_validator
 from cert_tools import helpers
 from cert_tools import jsonpath_helpers
 
+from string import Template
 
 class Recipient:
     def __init__(self, fields):
@@ -60,6 +61,8 @@ def instantiate_recipient(config, cert, recipient):
     cert[profile_field]['type'] = ['RecipientProfile', 'Extension']
     cert[profile_field]['name'] = recipient.name
     cert[profile_field]['publicKey'] = recipient.pubkey
+
+    cert['displayHtml'] = Template(cert['displayHtml']).safe_substitute(name=recipient.name)
 
     if config.additional_per_recipient_fields:
         if not recipient.additional_fields:
